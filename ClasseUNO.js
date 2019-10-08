@@ -64,7 +64,7 @@ cartas = cartas.concat(inicializaCartasBaralho('amarelo'));
 cartas = cartas.concat(inicializaCartasBaralho('verde'));
 cartas = cartas.concat(inicializaCartasBaralho('azul'));
 
-//--metodos--
+//--metodos-- dos agente
 //inicia jogo _construct(embaralha)
 //embaralhar
 //RemoveCarta (remove carta do baralho)

@@ -1,70 +1,70 @@
-var cartas = [];
+class UNO{
+	constructor(){
+		this.cartas = [];
 
-function inicializaCartasBaralho(corCarta){
-	let arrCartas = [];
-	let i = 0;
-	for(i = 0; i < 10; i++){
-		arrCartas.push({
-			'id': i,
-			'cor': corCarta,
-		});
+		this.cartas = this.cartas.concat(this.inicializaCartasBaralho('vermelho'));
+		this.cartas = this.cartas.concat(this.inicializaCartasBaralho('amarelo'));
+		this.cartas = this.cartas.concat(this.inicializaCartasBaralho('verde'));
+		this.cartas = this.cartas.concat(this.inicializaCartasBaralho('azul'));
 	}
 
-	arrCartas.push({
-		'id': i++,
-		'cor': corCarta,
-		'tipo': 'pular'
-	});
-	arrCartas.push({
-		'id': i++,
-		'cor': corCarta,
-		'tipo': 'reverter'
-	});
-	arrCartas.push({
-		'id': i++,
-		'cor': corCarta,
-		'tipo': '+2'
-	});
-	
+	inicializaCartasBaralho(corCarta){
+		let arrCartas = [];
+		let i = 0;
+		for(i = 0; i < 10; i++){
+			arrCartas.push({
+				'id': i,
+				'cor': corCarta,
+			});
+		}
 
-	for(let i = 1; i < 10; i++){
 		arrCartas.push({
-			'id': i,
+			'id': i++,
 			'cor': corCarta,
+			'tipo': 'pular'
 		});
+		arrCartas.push({
+			'id': i++,
+			'cor': corCarta,
+			'tipo': 'reverter'
+		});
+		arrCartas.push({
+			'id': i++,
+			'cor': corCarta,
+			'tipo': '+2'
+		});
+		
+
+		for(let i = 1; i < 10; i++){
+			arrCartas.push({
+				'id': i,
+				'cor': corCarta,
+			});
+		}
+
+
+		arrCartas.push({
+			'id': i++,
+			'cor': corCarta,
+			'tipo': 'pular'
+		});
+		arrCartas.push({
+			'id': i++,
+			'cor': corCarta,
+			'tipo': 'reverter'
+		});
+		arrCartas.push({
+			'id': i++,
+			'cor': corCarta,
+			'tipo': '+2'
+		});
+		arrCartas.push({
+			'id': i++,
+			'cor': 'preta',
+			'tipo': 'coringa'
+		});
+		
+		return arrCartas;
 	}
 
-
-	arrCartas.push({
-		'id': i++,
-		'cor': corCarta,
-		'tipo': 'pular'
-	});
-	arrCartas.push({
-		'id': i++,
-		'cor': corCarta,
-		'tipo': 'reverter'
-	});
-	arrCartas.push({
-		'id': i++,
-		'cor': corCarta,
-		'tipo': '+2'
-	});
-	arrCartas.push({
-		'id': i++,
-		'cor': 'preta',
-		'tipo': 'coringa'
-	});
-	
-	return arrCartas;
-}
-
-cartas = cartas.concat(inicializaCartasBaralho('vermelho'));
-cartas = cartas.concat(inicializaCartasBaralho('amarelo'));
-cartas = cartas.concat(inicializaCartasBaralho('verde'));
-cartas = cartas.concat(inicializaCartasBaralho('azul'));
-
-//--metodos-- dos agente
-//inicia jogo _construct(embaralha)
-//embaralhar
-//RemoveCarta (remove carta do baralho)
+}// Fim da classe

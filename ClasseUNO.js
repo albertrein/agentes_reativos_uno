@@ -6,6 +6,8 @@ class UNO{
 		this.cartas = this.cartas.concat(this.inicializaCartasBaralho('amarelo'));
 		this.cartas = this.cartas.concat(this.inicializaCartasBaralho('verde'));
 		this.cartas = this.cartas.concat(this.inicializaCartasBaralho('azul'));
+
+		this.embaralharCartas();
 	}
 
 	inicializaCartasBaralho(corCarta){
@@ -73,19 +75,24 @@ class UNO{
 	}
 
 	trocaCartasDePosicao(id1, id2){
-		//Captura objetos
-		let carta1 = this.cartas[id1];
-		let carta2 = this.cartas[id2];
+		return new Promise((resolve, reject) => {
+			//Captura objetos
+			let carta1 = this.cartas[id1];
+			let carta2 = this.cartas[id2];
 
-		//Altera objetos
-		this.cartas[id1] = carta2;
-		this.cartas[id2] = carta1;
+			//Altera objetos
+			this.cartas[id1] = carta2;
+			this.cartas[id2] = carta1;
+			resolve('OK');
+		});
 	}
 
-	embaralharCartas(){
+	//trocaCartasDePosicao(id1, id2){}
+
+	async embaralharCartas(){
 		//Executa um troca de cartas pela posição gerada aleatóriamente
 		for(let i = 0; i < 999999; i++){
-			this.trocaCartasDePosicao(this.getRandomNumero(), this.getRandomNumero());
+			await this.trocaCartasDePosicao(this.getRandomNumero(), this.getRandomNumero());
 		}
 	}
 

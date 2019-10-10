@@ -67,4 +67,26 @@ class UNO{
 		return arrCartas;
 	}
 
+	getRandomNumero(){
+		//Retorna um numero randomico
+		return Math.floor(Math.random() * (this.cartas.length));
+	}
+
+	trocaCartasDePosicao(id1, id2){
+		//Captura objetos
+		let carta1 = this.cartas[id1];
+		let carta2 = this.cartas[id2];
+
+		//Altera objetos
+		this.cartas[id1] = carta2;
+		this.cartas[id2] = carta1;
+	}
+
+	embaralharCartas(){
+		//Executa um troca de cartas pela posição gerada aleatóriamente
+		for(let i = 0; i < 999999; i++){
+			this.trocaCartasDePosicao(this.getRandomNumero(), this.getRandomNumero());
+		}
+	}
+
 }// Fim da classe

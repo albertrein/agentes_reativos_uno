@@ -1,7 +1,16 @@
 class Agente{
-	constructor(UNO, ambiente){
+	constructor(uno){
 		this.cartasNaMao = [];
+		
 		//pega 7 cartas do baralho
+		this.pegaCartaDoBaralho();
+		
+	}
+
+	pegaCartaDoBaralho(quantidade = 7){
+		for(let i = 0; i < quantidade; i++){
+			this.cartasNaMao.push(uno.retiraCartaDoBaralho());
+		}
 	}
 
 	//realizaJogada

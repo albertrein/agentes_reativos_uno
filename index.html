@@ -3,12 +3,19 @@
 <head>
 	<title>Agentes reativos - UNO</title>
 	<script type="text/javascript" src="ClasseUNO.js"></script>
+	<script type="text/javascript" src="agente.js"></script>
 </head>
 <body>
 	<h1>Jogo reativo de agente - UNO</h1>
 	<script type="text/javascript">
 		let uno = new UNO();
+
 		uno.embaralharCartas();
+
+		let agenteOne = new Agente(uno);
+
+
+		
 		console.log('>>',uno.cartas);
 	</script>
 </body>

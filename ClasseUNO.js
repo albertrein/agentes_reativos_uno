@@ -7,7 +7,7 @@ class UNO{
 		this.cartas = this.cartas.concat(this.inicializaCartasBaralho('verde'));
 		this.cartas = this.cartas.concat(this.inicializaCartasBaralho('azul'));
 
-		this.embaralharCartas();
+		this.ambiente = [];
 	}
 
 	inicializaCartasBaralho(corCarta){
@@ -94,6 +94,12 @@ class UNO{
 		for(let i = 0; i < 999999; i++){
 			await this.trocaCartasDePosicao(this.getRandomNumero(), this.getRandomNumero());
 		}
+	}
+
+	retiraCartaDoBaralho(){
+		let carta = this.cartas[this.cartas.length-1];
+		this.cartas.pop();
+		return carta;
 	}
 
 }// Fim da classe

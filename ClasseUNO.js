@@ -97,6 +97,10 @@ class UNO{
 	}
 
 	retiraCartaDoBaralho(){
+		if((this.inicializaCartasBaralho.length - 1) < 0){
+			throw new Exception('Acabou as cartas!');
+			return null;
+		}
 		let carta = this.cartas[this.cartas.length-1];
 		this.cartas.pop();
 		return carta;

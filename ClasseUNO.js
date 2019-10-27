@@ -87,23 +87,26 @@ class UNO{
 		});
 	}
 
-	//trocaCartasDePosicao(id1, id2){}
-
 	async embaralharCartas(){
 		//Executa um troca de cartas pela posição gerada aleatóriamente
-		for(let i = 0; i < 999999; i++){
+		for(let i = 0; i < 99999; i++){
 			await this.trocaCartasDePosicao(this.getRandomNumero(), this.getRandomNumero());
 		}
 	}
 
 	retiraCartaDoBaralho(){
-		if((this.inicializaCartasBaralho.length - 1) < 0){
-			throw new Exception('Acabou as cartas!');
-			return null;
-		}
-		let carta = this.cartas[this.cartas.length-1];
-		this.cartas.pop();
-		return carta;
+		return new Promise( (resolve, reject) => {
+
+			if((this.inicializaCartasBaralho.length - 1) < 0){
+				reject('Acabou as cartas!');
+			}
+
+			let carta = this.cartas[this.cartas.length-1];
+			this.cartas.pop();
+			resolve(carta);
+
+		}); //fim promise
 	}
 
+	
 }// Fim da classe

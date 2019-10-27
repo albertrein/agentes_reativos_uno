@@ -1,26 +1,44 @@
 class Agente{
-	constructor(uno){
+	constructor(uno, nome = 'Smith'){
 		this.cartasNaMao = [];
-		
+		this.nomeAgente = nome;
+
 		//pega 7 cartas do baralho
-		this.pegaCartaDoBaralho();
+		//this.pegaCartaDoBaralho();
 		
 	}
 
 	pegaCartaDoBaralho(quantidade = 7){
 		for(let i = 0; i < quantidade; i++){
-			this.cartasNaMao.push(uno.retiraCartaDoBaralho());
+
+			uno.retiraCartaDoBaralho().then( (carta) => {
+				//Executa promise, resolve retorna a última carta do baralho
+				this.cartasNaMao.push(uno.retiraCartaDoBaralho());
+			}).catch( (error) => {
+				//Reject erro. Acabou as cartas do baralho.
+				throw error;
+			});			
+
 		}
 	}
 
-	//realizaJogada
-		//Observa ambiente
-		//procura cartas na lista de cartasNaMao
-	
-	//pegaNumeroCartas especifico de cartas do baralho
+	mostrarCartasNaMao(){ this.pegaCartaDoBaralho(); console.log(this.cartasNaMao); }
 
-	//--metodos-- dos agente
-//inicia jogo _construct(embaralha)
-//embaralhar
-//RemoveCarta (remove carta do baralho)
+	async realizaJogada(){
+		//Observa ambiente
+			//Observa ultima carta jogada e realiza operação de acordo com ela
+
+		if(this.cartasNaMao.length <= 0){
+			thrown this.nomeAgente + ' Ganhou!';
+		}
+
+	}
+
+	/*
+	todo list		
+		- realizaJogada
+			- observar ambiente
+			- Jogar de acordo
+	*/
+
 }

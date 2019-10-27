@@ -1,22 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8">
 	<title>Agentes reativos - UNO</title>
 	<script type="text/javascript" src="ClasseUNO.js"></script>
-	<script type="text/javascript" src="agente.js"></script>
+	<script type="text/javascript" src="Agente.js"></script>
 </head>
 <body>
 	<h1>Jogo reativo de agente - UNO</h1>
 	<script type="text/javascript">
-		let uno = new UNO();
+		function ambiente (){
 
-		uno.embaralharCartas();
+			let uno = new UNO(); // Instância objeto, cria cartas do baralho
+			uno.embaralharCartas(); // Embaralha cartas
+			
+			//Aguardar o embaralhamento das cartas
 
-		let agenteOne = new Agente(uno);
+			async function jogo(){
+				//Instancia agentes
+				let agente1 = new Agente(uno);
+				let agente2 = new Agente(uno);
+
+				//Inicia laço infinito
+				//Cada agente realiza suas jogadas
+				//Finaliza com uma chamada de expetion que caí no catch de fora
+				while(true){
+					await agente1.realizaJogada;
+					await agente2.realizaJogada;
+				}			
+			}
+
+			try{
+				jogo();
+			}catch(e){
+				console.log(e); // O agente retornará uma exception dizendo o que está acontecendo, se ganhou ou acabaram as cartas
+			}
+
+		}
+
+		ambiente();
 
 
-		
-		console.log('>>',uno.cartas);
 	</script>
 </body>
 </html>

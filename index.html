@@ -9,7 +9,7 @@
 <body>
 	<h1>Jogo reativo de agente - UNO</h1>
 	<script type="text/javascript">
-		function ambiente (){
+		async function ambiente (){
 
 			let uno = new UNO(); // Instância objeto, cria cartas do baralho
 			uno.embaralharCartas(); // Embaralha cartas
@@ -31,7 +31,7 @@
 			}
 
 			try{
-				jogo();
+				await jogo();
 			}catch(e){
 				console.log(e); // O agente retornará uma exception dizendo o que está acontecendo, se ganhou ou acabaram as cartas
 			}

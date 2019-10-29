@@ -1,0 +1,19 @@
+{
+  "name": "agentes_reativos_uno",
+  "version": "1.0.0",
+  "description": "Sistema de agentes reativos, para estudos de promises;",
+  "main": "ClasseUNO.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/albertrein/agentes_reativos_uno.git"
+  },
+  "author": "albertrein",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/albertrein/agentes_reativos_uno/issues"
+  },
+  "homepage": "https://github.com/albertrein/agentes_reativos_uno#readme"
+}

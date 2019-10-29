@@ -12,10 +12,7 @@
 		async function ambiente (){
 
 			let uno = new UNO(); // Instância objeto, cria cartas do baralho
-			uno.embaralharCartas(); // Embaralha cartas
-			
-			//Aguardar o embaralhamento das cartas
-
+						
 			async function jogo(){
 				//Instancia agentes
 				let agente1 = new Agente(uno);
@@ -31,6 +28,7 @@
 			}
 
 			try{
+				await uno.embaralharCartas(); // Embaralha cartas
 				await jogo();
 			}catch(e){
 				console.log(e); // O agente retornará uma exception dizendo o que está acontecendo, se ganhou ou acabaram as cartas

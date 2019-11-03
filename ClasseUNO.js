@@ -17,23 +17,27 @@ class UNO{
 			arrCartas.push({
 				'id': i,
 				'cor': corCarta,
+				'tipo': 'numerada'
 			});
 		}
 
 		arrCartas.push({
 			'id': i++,
 			'cor': corCarta,
-			'tipo': 'pular'
+			'tipo': 'coringa'
+			'acao': 'pular'
 		});
 		arrCartas.push({
 			'id': i++,
 			'cor': corCarta,
-			'tipo': 'reverter'
+			'tipo': 'coringa'
+			'acao': 'reverter'
 		});
 		arrCartas.push({
 			'id': i++,
 			'cor': corCarta,
-			'tipo': '+2'
+			'tipo': 'coringa'
+			'acao': '+2'
 		});
 		
 
@@ -41,6 +45,7 @@ class UNO{
 			arrCartas.push({
 				'id': i,
 				'cor': corCarta,
+				'tipo': 'numerada'
 			});
 		}
 
@@ -48,22 +53,26 @@ class UNO{
 		arrCartas.push({
 			'id': i++,
 			'cor': corCarta,
-			'tipo': 'pular'
+			'tipo': 'coringa'
+			'acao': 'pular'
 		});
 		arrCartas.push({
 			'id': i++,
 			'cor': corCarta,
-			'tipo': 'reverter'
+			'tipo': 'coringa'
+			'acao': 'reverter'
 		});
 		arrCartas.push({
 			'id': i++,
 			'cor': corCarta,
-			'tipo': '+2'
+			'tipo': 'coringa'
+			'acao': '+2'
 		});
 		arrCartas.push({
 			'id': i++,
 			'cor': 'preta',
 			'tipo': 'coringa'
+			'acao': '+4'
 		});
 		
 		return arrCartas;
@@ -106,6 +115,14 @@ class UNO{
 			resolve(carta);
 
 		}); //fim promise
+	}
+
+	getUltimaCartaJogadaNoAmbiente(){
+		return ambiente[ambiente.length-1];
+	}
+
+	insereCartaNoAmbiente(carta){
+		this.ambiente.push(carta);
 	}
 
 	

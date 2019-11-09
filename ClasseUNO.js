@@ -8,6 +8,7 @@ class UNO{
 		this.cartas = this.cartas.concat(this.inicializaCartasBaralho('azul'));
 
 		this.ambiente = [];
+		this.insereCartaNoAmbiente(this.cartas[27]);
 	}
 
 	inicializaCartasBaralho(corCarta){
@@ -24,19 +25,19 @@ class UNO{
 		arrCartas.push({
 			'id': i++,
 			'cor': corCarta,
-			'tipo': 'coringa'
+			'tipo': 'coringa',
 			'acao': 'pular'
 		});
 		arrCartas.push({
 			'id': i++,
 			'cor': corCarta,
-			'tipo': 'coringa'
+			'tipo': 'coringa',
 			'acao': 'reverter'
 		});
 		arrCartas.push({
 			'id': i++,
 			'cor': corCarta,
-			'tipo': 'coringa'
+			'tipo': 'coringa',
 			'acao': '+2'
 		});
 		
@@ -53,25 +54,25 @@ class UNO{
 		arrCartas.push({
 			'id': i++,
 			'cor': corCarta,
-			'tipo': 'coringa'
+			'tipo': 'coringa',
 			'acao': 'pular'
 		});
 		arrCartas.push({
 			'id': i++,
 			'cor': corCarta,
-			'tipo': 'coringa'
+			'tipo': 'coringa',
 			'acao': 'reverter'
 		});
 		arrCartas.push({
 			'id': i++,
 			'cor': corCarta,
-			'tipo': 'coringa'
+			'tipo': 'coringa',
 			'acao': '+2'
 		});
 		arrCartas.push({
 			'id': i++,
 			'cor': 'preta',
-			'tipo': 'coringa'
+			'tipo': 'coringa',
 			'acao': '+4'
 		});
 		
@@ -118,7 +119,7 @@ class UNO{
 	}
 
 	getUltimaCartaJogadaNoAmbiente(){
-		return ambiente[ambiente.length-1];
+		return this.ambiente[this.ambiente.length-1];
 	}
 
 	insereCartaNoAmbiente(carta){

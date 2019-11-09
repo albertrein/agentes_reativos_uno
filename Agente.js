@@ -1,10 +1,10 @@
 class Agente{
-	constructor(uno, nome = 'Smith'){
+	constructor(uno, nome = "Smith"){
 		this.cartasNaMao = [];
 		this.nomeAgente = nome;
 		this.uno = uno;
 		//pega 7 cartas do baralho
-		//this.pegaCartaDoBaralho();
+		this.pegaCartaDoBaralho();
 		
 	}
 
@@ -71,19 +71,11 @@ class Agente{
 
 	verificaGanhador(){
 		if(this.cartasNaMao.length <= 0){
-			thrown this.nomeAgente + ' Ganhou!';
+			throw this.nomeAgente + ' Ganhou!';
 		}
 	}
 
 	insereCartaNaMao(carta){
 		this.cartasNaMao.push(carta);
 	}
-
-	/*
-	todo list		
-		verificar se a classe this.uno tem que usar o this
-		inserir promises no realiza jogada
-		testar
-	*/
-
 }

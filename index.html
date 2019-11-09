@@ -11,25 +11,34 @@
 	<script type="text/javascript">
 		async function ambiente (){
 
-			let uno = new UNO(); // Instância objeto, cria cartas do baralho
+			var uno = new UNO(); // Instância objeto, cria cartas do baralho
 						
 			async function jogo(){
+				console.log('Iniciando Jogo');
 				//Instancia agentes
-				let agente1 = new Agente(uno);
-				let agente2 = new Agente(uno);
+				let agente1 = new Agente(uno, 'Smith');
+				let agente2 = new Agente(uno, 'NEO');
 
 				//Inicia laço infinito
 				//Cada agente realiza suas jogadas
 				//Finaliza com uma chamada de expetion que caí no catch de fora
-				while(true){
-					await agente1.realizaJogada;
-					await agente2.realizaJogada;
-				}			
+				for(let i = 0; i < 5; i++){
+					try{
+						await agente1.realizaJogada();
+						console.log('Agente1');
+						await agente2.realizaJogada();
+						console.log('Agente2');
+					}catch(error){
+						console.warn('#1 Gerada Throw: ',error);
+					}
+					console.log('Foi ',i,uno.ambiente);
+				}
 			}
 
 			try{
-				await uno.embaralharCartas(); // Embaralha cartas
-				await jogo();
+				//await uno.embaralharCartas(); // Embaralha cartas
+				console.warn('Cartas', uno.cartas);
+				//await jogo();
 			}catch(e){
 				console.log(e); // O agente retornará uma exception dizendo o que está acontecendo, se ganhou ou acabaram as cartas
 			}
@@ -38,6 +47,10 @@
 
 		ambiente();
 
+		/**
+		* TodoList:
+		* Testar Promises do embaralhamento de cartas
+		*/
 
 	</script>
 </body>

@@ -2,7 +2,7 @@ class Agente{
 	constructor(uno, nome = 'Smith'){
 		this.cartasNaMao = [];
 		this.nomeAgente = nome;
-
+		this.uno = uno;
 		//pega 7 cartas do baralho
 		//this.pegaCartaDoBaralho();
 		
@@ -11,9 +11,9 @@ class Agente{
 	pegaCartaDoBaralho(quantidade = 7){
 		for(let i = 0; i < quantidade; i++){
 
-			uno.retiraCartaDoBaralho().then( (carta) => {
+			this.uno.retiraCartaDoBaralho().then( (carta) => {
 				//Executa promise, resolve retorna a última carta do baralho
-				this.cartasNaMao.push(uno.retiraCartaDoBaralho());
+				this.cartasNaMao.push(this.uno.retiraCartaDoBaralho());
 			}).catch( (error) => {
 				//Reject erro. Acabou as cartas do baralho.
 				throw error;
@@ -25,7 +25,7 @@ class Agente{
 	mostrarCartasNaMao(){ this.pegaCartaDoBaralho(); console.log(this.cartasNaMao); }
 
 	async realizaJogada(){
-		let ultimaCartaJogada = uno.getUltimaCartaJogadaNoAmbiente();
+		let ultimaCartaJogada = this.uno.getUltimaCartaJogadaNoAmbiente();
 
 		//Verifica se a última carta foi uma coringa e retorna
 		if(ultimaCartaJogada.tipo === 'coringa'){
@@ -47,7 +47,7 @@ class Agente{
 		//Encontra uma carta para jogar
 		this.cartasNaMao.forEach((carta, chave) => {
 			if( (carta.tipo === 'numerada' && ((carta.cor === ultimaCartaJogada.cor) || (carta.id === ultimaCartaJogada.id)))  || carta.tipo === 'coringa' ){
-				uno.insereCartaNoAmbiente(carta); //Inserindo carta
+				this.uno.insereCartaNoAmbiente(carta); //Inserindo carta
 				this.cartasNaMao.splice(chave, chave); //Remove carta da mão
 				this.verificaGanhador(); // retorna throw se acabou as cartas
 				return;
@@ -57,10 +57,10 @@ class Agente{
 		//Não encontrou cartas na mão
 		//retirar cartas do baralho até encontrar
 		while(true){
-			let novaCarta = await uno.retiraCartaDoBaralho().catch((erro) => {throw erro});
+			let novaCarta = await this.uno.retiraCartaDoBaralho().catch((erro) => {throw erro});
 
 			if( (novaCarta.tipo === 'numerada' && ((novaCarta.cor === ultimaCartaJogada.cor) || (novaCarta.id === ultimaCartaJogada.id)))  || novaCarta.tipo === 'coringa' ){
-				uno.insereCartaNoAmbiente(carta); //Inserindo carta				
+				this.uno.insereCartaNoAmbiente(carta); //Inserindo carta				
 				return;
 			}else{
 				insereCartaNaMao(novaCarta);
@@ -81,9 +81,9 @@ class Agente{
 
 	/*
 	todo list		
-		- realizaJogada
-			- observar ambiente
-			- Jogar de acordo
+		verificar se a classe this.uno tem que usar o this
+		inserir promises no realiza jogada
+		testar
 	*/
 
 }

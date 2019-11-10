@@ -36,9 +36,10 @@
 			}
 
 			try{
-				//await uno.embaralharCartas(); // Embaralha cartas
-				console.warn('Cartas', uno.cartas);
-				//await jogo();
+				await uno.inicializaCartasDoBaralho(); // Cria cartas
+				await uno.embaralharCartas(); // Embaralha cartas
+				uno.ambiente = uno.cartas[27]; // Passando uma carta pro ambiente
+				await jogo();
 			}catch(e){
 				console.log(e); // O agente retornará uma exception dizendo o que está acontecendo, se ganhou ou acabaram as cartas
 			}

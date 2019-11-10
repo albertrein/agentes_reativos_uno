@@ -1,82 +1,91 @@
 class UNO{
 	constructor(){
 		this.cartas = [];
-
-		this.cartas = this.cartas.concat(this.inicializaCartasBaralho('vermelho'));
-		this.cartas = this.cartas.concat(this.inicializaCartasBaralho('amarelo'));
-		this.cartas = this.cartas.concat(this.inicializaCartasBaralho('verde'));
-		this.cartas = this.cartas.concat(this.inicializaCartasBaralho('azul'));
-
-		this.ambiente = [];
-		this.insereCartaNoAmbiente(this.cartas[27]);
+		this.ambiente = [];		
 	}
 
-	inicializaCartasBaralho(corCarta){
-		let arrCartas = [];
-		let i = 0;
-		for(i = 0; i < 10; i++){
+	/**
+	* Função inicializaCartasDoBaralho
+	* Insere um array de cartas através de uma Promise criaCartasDoBaralho
+	* Uma chamada da Promise para cada cor de carta
+	* A concatenação é necessária, pois as cartas devem ficar todas em um array único e não um array de arrays
+	*/
+	async inicializaCartasDoBaralho(){
+		this.cartas = this.cartas.concat( await this.criaCartasDoBaralho('vermelho'));
+		this.cartas = this.cartas.concat( await this.criaCartasDoBaralho('amarelo'));
+		this.cartas = this.cartas.concat( await this.criaCartasDoBaralho('verde'));
+		this.cartas = this.cartas.concat( await this.criaCartasDoBaralho('azul'));
+	}
+
+	criaCartasDoBaralho(corCarta){
+		return new Promise( (resolve, reject) => {
+			let arrCartas = [];
+			let i = 0;
+			for(i = 0; i < 10; i++){
+				arrCartas.push({
+					'id': i,
+					'cor': corCarta,
+					'tipo': 'numerada'
+				});
+			}
+
 			arrCartas.push({
-				'id': i,
+				'id': i++,
 				'cor': corCarta,
-				'tipo': 'numerada'
+				'tipo': 'coringa',
+				'acao': 'pular'
 			});
-		}
-
-		arrCartas.push({
-			'id': i++,
-			'cor': corCarta,
-			'tipo': 'coringa',
-			'acao': 'pular'
-		});
-		arrCartas.push({
-			'id': i++,
-			'cor': corCarta,
-			'tipo': 'coringa',
-			'acao': 'reverter'
-		});
-		arrCartas.push({
-			'id': i++,
-			'cor': corCarta,
-			'tipo': 'coringa',
-			'acao': '+2'
-		});
-		
-
-		for(let i = 1; i < 10; i++){
 			arrCartas.push({
-				'id': i,
+				'id': i++,
 				'cor': corCarta,
-				'tipo': 'numerada'
+				'tipo': 'coringa',
+				'acao': 'reverter'
 			});
-		}
+			arrCartas.push({
+				'id': i++,
+				'cor': corCarta,
+				'tipo': 'coringa',
+				'acao': '+2'
+			});
+			
+
+			for(let i = 1; i < 10; i++){
+				arrCartas.push({
+					'id': i,
+					'cor': corCarta,
+					'tipo': 'numerada'
+				});
+			}
 
 
-		arrCartas.push({
-			'id': i++,
-			'cor': corCarta,
-			'tipo': 'coringa',
-			'acao': 'pular'
-		});
-		arrCartas.push({
-			'id': i++,
-			'cor': corCarta,
-			'tipo': 'coringa',
-			'acao': 'reverter'
-		});
-		arrCartas.push({
-			'id': i++,
-			'cor': corCarta,
-			'tipo': 'coringa',
-			'acao': '+2'
-		});
-		arrCartas.push({
-			'id': i++,
-			'cor': 'preta',
-			'tipo': 'coringa',
-			'acao': '+4'
-		});
-		
-		return arrCartas;
+			arrCartas.push({
+				'id': i++,
+				'cor': corCarta,
+				'tipo': 'coringa',
+				'acao': 'pular'
+			});
+			arrCartas.push({
+				'id': i++,
+				'cor': corCarta,
+				'tipo': 'coringa',
+				'acao': 'reverter'
+			});
+			arrCartas.push({
+				'id': i++,
+				'cor': corCarta,
+				'tipo': 'coringa',
+				'acao': '+2'
+			});
+			arrCartas.push({
+				'id': i++,
+				'cor': 'preta',
+				'tipo': 'coringa',
+				'acao': '+4'
+			});
+			
+			resolve(arrCartas); //Retorna com o Array de cartas
+
+		}); //Fim da promise
 	}
 
 	getRandomNumero(){

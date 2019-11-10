@@ -116,7 +116,7 @@ class UNO{
 	retiraCartaDoBaralho(){
 		return new Promise( (resolve, reject) => {
 
-			if((this.inicializaCartasBaralho.length - 1) < 0){
+			if((this.cartas.length - 1) <= 0){
 				reject('Acabou as cartas!');
 			}
 

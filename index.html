@@ -9,37 +9,37 @@
 <body>
 	<h1>Jogo reativo de agente - UNO</h1>
 	<script type="text/javascript">
+		async function jogo(uno){
+			console.log('Iniciando Jogo');
+
+			//Instancia agentes
+			let agente1 = new Agente(uno, 'Smith');
+			let agente2 = new Agente(uno, 'NEO');
+			//Inicia laço infinito
+			//Cada agente realiza suas jogadas
+			//Finaliza com uma chamada de expetion que caí no catch de fora
+			for(let i = 0; i < 5; i++){
+				try{
+					await agente1.realizaJogada();
+					console.log('Agente1');
+					await agente2.realizaJogada();
+					console.log('Agente2');
+				}catch(error){
+					console.warn('#1 Gerada Throw: ',error);
+				}
+				console.log('Foi ',i,uno.ambiente);
+			}
+		}
+
 		async function ambiente (){
 
-			var uno = new UNO(); // Instância objeto, cria cartas do baralho
-						
-			async function jogo(){
-				console.log('Iniciando Jogo');
-				//Instancia agentes
-				let agente1 = new Agente(uno, 'Smith');
-				let agente2 = new Agente(uno, 'NEO');
-
-				//Inicia laço infinito
-				//Cada agente realiza suas jogadas
-				//Finaliza com uma chamada de expetion que caí no catch de fora
-				for(let i = 0; i < 5; i++){
-					try{
-						await agente1.realizaJogada();
-						console.log('Agente1');
-						await agente2.realizaJogada();
-						console.log('Agente2');
-					}catch(error){
-						console.warn('#1 Gerada Throw: ',error);
-					}
-					console.log('Foi ',i,uno.ambiente);
-				}
-			}
+			var uno = new UNO(); // Instância objeto, cria cartas do baralho			
 
 			try{
 				await uno.inicializaCartasDoBaralho(); // Cria cartas
 				await uno.embaralharCartas(); // Embaralha cartas
-				uno.ambiente = uno.cartas[27]; // Passando uma carta pro ambiente
-				await jogo();
+				uno.ambiente.push(uno.cartas[27]); // Passando uma carta pro ambiente
+				await jogo(uno);
 			}catch(e){
 				console.log(e); // O agente retornará uma exception dizendo o que está acontecendo, se ganhou ou acabaram as cartas
 			}

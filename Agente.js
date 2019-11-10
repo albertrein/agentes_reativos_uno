@@ -5,6 +5,7 @@ class Agente{
 		this.uno = uno;
 		//pega 7 cartas do baralho
 		this.pegaCartaDoBaralho();
+		console.log(this.cartasNaMao);
 		
 	}
 

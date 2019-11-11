@@ -15,10 +15,18 @@
 			//Instancia agentes
 			let agente1 = new Agente(uno, 'Smith');
 			let agente2 = new Agente(uno, 'NEO');
+			
+			//Agente capturam suas cartas iniciais
+			await agente1.pegaCartaDoBaralho();
+			await agente2.pegaCartaDoBaralho();
+			// console.log('cartas agt1:', agente1.cartasNaMao);
+			// console.log('cartas agt2:', agente2.cartasNaMao);
+
+
 			//Inicia laço infinito
 			//Cada agente realiza suas jogadas
 			//Finaliza com uma chamada de expetion que caí no catch de fora
-			for(let i = 0; i < 5; i++){
+			for(let i = 0; i < 500; i++){
 				try{
 					await agente1.realizaJogada();
 					console.log('Agente1');
@@ -26,8 +34,9 @@
 					console.log('Agente2');
 				}catch(error){
 					console.warn('#1 Gerada Throw: ',error);
+					return;
 				}
-				console.log('Foi ',i,uno.ambiente);
+				//console.log('Foi ',i,uno.ambiente);
 			}
 		}
 

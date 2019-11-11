@@ -2,23 +2,18 @@ class Agente{
 	constructor(uno, nome = "Smith"){
 		this.cartasNaMao = [];
 		this.nomeAgente = nome;
-		this.uno = uno;
-		//pega 7 cartas do baralho
-		this.pegaCartaDoBaralho();
-		console.log(this.cartasNaMao);
-		
+		this.uno = uno;		
 	}
 
-	pegaCartaDoBaralho(quantidade = 7){
+	async pegaCartaDoBaralho(quantidade = 7){
 		for(let i = 0; i < quantidade; i++){
-
-			this.uno.retiraCartaDoBaralho().then( (carta) => {
-				//Executa promise, resolve retorna a última carta do baralho
-				this.cartasNaMao.push(this.uno.retiraCartaDoBaralho());
-			}).catch( (error) => {
-				//Reject erro. Acabou as cartas do baralho.
-				throw error;
-			});			
+			try{
+				let carta = await this.uno.retiraCartaDoBaralho();
+				this.cartasNaMao.push(carta);				
+			}catch(erro){
+				console.warn('Acabaram as cartas');
+				throw erro;
+			}
 
 		}
 	}
@@ -58,13 +53,13 @@ class Agente{
 		//Não encontrou cartas na mão
 		//retirar cartas do baralho até encontrar
 		while(true){
-			let novaCarta = await this.uno.retiraCartaDoBaralho().catch((erro) => {throw erro});
+			let novaCarta = await this.uno.retiraCartaDoBaralho();
 
 			if( (novaCarta.tipo === 'numerada' && ((novaCarta.cor === ultimaCartaJogada.cor) || (novaCarta.id === ultimaCartaJogada.id)))  || novaCarta.tipo === 'coringa' ){
-				this.uno.insereCartaNoAmbiente(carta); //Inserindo carta				
+				this.uno.insereCartaNoAmbiente(novaCarta); //Inserindo carta				
 				return;
 			}else{
-				insereCartaNaMao(novaCarta);
+				this.insereCartaNaMao(novaCarta);
 			}
 
 		}
@@ -80,3 +75,7 @@ class Agente{
 		this.cartasNaMao.push(carta);
 	}
 }
+
+	/** TodoList:
+		* Re-visar lógica do ganhador	
+	*/

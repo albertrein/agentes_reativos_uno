@@ -42,21 +42,24 @@ class Agente{
 		
 		//Encontra uma carta para jogar
 		this.cartasNaMao.forEach((carta, chave) => {
-			if( (carta.tipo === 'numerada' && ((carta.cor === ultimaCartaJogada.cor) || (carta.id === ultimaCartaJogada.id)))  || carta.tipo === 'coringa' ){
+			if( (carta.tipo == 'numerada' && ((carta.cor == ultimaCartaJogada.cor) || (carta.id == ultimaCartaJogada.id)))  || carta.tipo == 'coringa' ){
 				this.uno.insereCartaNoAmbiente(carta); //Inserindo carta
 				this.cartasNaMao.splice(chave, chave); //Remove carta da mão
 				this.verificaGanhador(); // retorna throw se acabou as cartas
+				console.log(this.nomeAgente+' jogou:',carta);
 				return;
 			}
 		});
 
 		//Não encontrou cartas na mão
 		//retirar cartas do baralho até encontrar
-		while(true){
+		while(this.uno.cartas.length > 0){
 			let novaCarta = await this.uno.retiraCartaDoBaralho();
 
-			if( (novaCarta.tipo === 'numerada' && ((novaCarta.cor === ultimaCartaJogada.cor) || (novaCarta.id === ultimaCartaJogada.id)))  || novaCarta.tipo === 'coringa' ){
-				this.uno.insereCartaNoAmbiente(novaCarta); //Inserindo carta				
+			if( (novaCarta.tipo == 'numerada' && ((novaCarta.cor == ultimaCartaJogada.cor) || (novaCarta.id == ultimaCartaJogada.id)))  || novaCarta.tipo == 'coringa' ){
+				this.uno.insereCartaNoAmbiente(novaCarta); //Inserindo carta
+				console.log(this.nomeAgente+' jogou:',novaCarta);
+				this.verificaGanhador();			
 				return;
 			}else{
 				this.insereCartaNaMao(novaCarta);

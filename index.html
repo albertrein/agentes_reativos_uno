@@ -26,18 +26,27 @@
 			//Inicia laço infinito
 			//Cada agente realiza suas jogadas
 			//Finaliza com uma chamada de expetion que caí no catch de fora
-			for(let i = 0; i < 500; i++){
-				try{
+			
+			try{
+				while(uno.cartas.length > 0){
 					await agente1.realizaJogada();
-					console.log('Agente1');
 					await agente2.realizaJogada();
-					console.log('Agente2');
-				}catch(error){
-					console.warn('#1 Gerada Throw: ',error);
-					return;
 				}
-				//console.log('Foi ',i,uno.ambiente);
+			}catch(error){
+				console.warn('#1 Gerada Throw: ',error);
+				return;
 			}
+
+			// for(let i = 0; i < 500; i++){
+			// 	try{
+			// 		await agente1.realizaJogada();
+			// 		await agente2.realizaJogada();
+			// 	}catch(error){
+			// 		console.warn('#1 Gerada Throw: ',error);
+			// 		return;
+			// 	}
+			// 	//console.log('Foi ',i,uno.ambiente);
+			// }
 		}
 
 		async function ambiente (){

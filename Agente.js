@@ -9,7 +9,8 @@ class Agente{
 		for(let i = 0; i < quantidade; i++){
 			try{
 				let carta = await this.uno.retiraCartaDoBaralho();
-				this.cartasNaMao.push(carta);				
+				this.cartasNaMao.push(carta);
+				console.log('Carta Capturada:',carta);
 			}catch(erro){
 				console.warn('Acabaram as cartas');
 				throw erro;
@@ -20,52 +21,85 @@ class Agente{
 
 	mostrarCartasNaMao(){ this.pegaCartaDoBaralho(); console.log(this.cartasNaMao); }
 
-	async realizaJogada(){
-		let ultimaCartaJogada = this.uno.getUltimaCartaJogadaNoAmbiente();
-
-		//Verifica se a última carta foi uma coringa e retorna
-		if(ultimaCartaJogada.tipo === 'coringa'){
-			switch(ultimaCartaJogada.acao){
-				case 'pular':
-					break;
-				case 'reverter':
-					break;
-				case '+2':
-					this.pegaCartaDoBaralho(2);
-					break;
-				case '+4':
-					this.pegaCartaDoBaralho(4);					
+	isUltimaCartaJogadaCoringa(ultimaCartaJogada){
+		return new Promise((resolve, reject) => {
+			//Verifica se a última carta foi uma coringa e retorna
+			if(ultimaCartaJogada.tipo === 'coringa'){
+				switch(ultimaCartaJogada.acao){
+					case 'pular':
+						break;
+					case 'reverter':
+						break;
+					case '+2':
+						this.pegaCartaDoBaralho(2);
+						break;
+					case '+4':
+						this.pegaCartaDoBaralho(4);					
+				}
+				resolve();
 			}
-			return;
-		}
+			reject();
+		});
+	}
 
-		
-		//Encontra uma carta para jogar
-		this.cartasNaMao.forEach((carta, chave) => {
-			if( (carta.tipo == 'numerada' && ((carta.cor == ultimaCartaJogada.cor) || (carta.id == ultimaCartaJogada.id)))  || carta.tipo == 'coringa' ){
-				this.uno.insereCartaNoAmbiente(carta); //Inserindo carta
-				this.cartasNaMao.splice(chave, chave); //Remove carta da mão
-				this.verificaGanhador(); // retorna throw se acabou as cartas
-				console.log(this.nomeAgente+' jogou:',carta);
-				return;
+	jogaCartaNaMao(ultimaCartaJogada){
+		return new Promise((resolve, reject) => {
+			//Encontra uma carta para jogar
+			this.cartasNaMao.forEach((carta, chave) => {
+				if( (carta.tipo == 'numerada' && ((carta.cor == ultimaCartaJogada.cor) || (carta.id == ultimaCartaJogada.id)))  || carta.tipo == 'coringa' ){
+					this.uno.insereCartaNoAmbiente(carta); //Inserindo carta
+					this.cartasNaMao.splice(chave, chave); //Remove carta da mão
+					this.verificaGanhador(); // retorna throw se acabou as cartas
+					console.log(this.nomeAgente+' jogou:',carta);
+					console.log(this.nomeAgente+' jogou:',carta);
+					resolve(true);
+				}
+			});
+			reject();
+		});
+	}
+
+	realizaBuscaNoBaralho(ultimaCartaJogada){
+		return new Promise(async (resolve, reject) => {
+			//Não encontrou cartas na mão
+			//retirar cartas do baralho até encontrar
+			while(this.uno.cartas.length > 0){
+				let novaCarta = await this.uno.retiraCartaDoBaralho();
+
+				if( (novaCarta.tipo == 'numerada' && ((novaCarta.cor == ultimaCartaJogada.cor) || (novaCarta.id == ultimaCartaJogada.id)))  || novaCarta.tipo == 'coringa' ){
+					this.uno.insereCartaNoAmbiente(novaCarta); //Inserindo carta
+					console.log(this.nomeAgente+' jogou:',novaCarta);
+					this.verificaGanhador();			
+					resolve();
+				}else{
+					this.insereCartaNaMao(novaCarta);
+				}
 			}
 		});
+	}
 
-		//Não encontrou cartas na mão
-		//retirar cartas do baralho até encontrar
-		while(this.uno.cartas.length > 0){
-			let novaCarta = await this.uno.retiraCartaDoBaralho();
-
-			if( (novaCarta.tipo == 'numerada' && ((novaCarta.cor == ultimaCartaJogada.cor) || (novaCarta.id == ultimaCartaJogada.id)))  || novaCarta.tipo == 'coringa' ){
-				this.uno.insereCartaNoAmbiente(novaCarta); //Inserindo carta
-				console.log(this.nomeAgente+' jogou:',novaCarta);
-				this.verificaGanhador();			
+	async realizaJogada(){
+		let ultimaCartaJogada = this.uno.getUltimaCartaJogadaNoAmbiente();
+		console.log(this.nomeAgente,' está jogando');
+		console.log(ultimaCartaJogada,' ultimaCartaJOgada');
+		this.isUltimaCartaJogadaCoringa(ultimaCartaJogada).then(() => {
+			return;
+		}).catch(() =>{
+			this.jogaCartaNaMao(ultimaCartaJogada).then(() => {
 				return;
-			}else{
-				this.insereCartaNaMao(novaCarta);
-			}
+			}).catch(() => {
+				this.realizaBuscaNoBaralho(ultimaCartaJogada).then(() => {
+					return;
+				}).catch(()=>{
+					throw 'Aconteceu algo que nao devia!';
+				});
+			});
+		});
 
-		}
+
+		// await this.isUltimaCartaJogadaCoringa(ultimaCartaJogada);
+		// await this.jogaCartaNaMao(ultimaCartaJogada);
+		// await this.realizaBuscaNoBaralho(ultimaCartaJogada);
 	}
 
 	verificaGanhador(){

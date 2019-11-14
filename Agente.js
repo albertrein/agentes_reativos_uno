@@ -17,7 +17,7 @@ class Agente{
 			try{
 				let carta = await this.uno.retiraCartaDoBaralho();
 				this.cartasNaMao.push(carta);
-				console.log('Carta Capturada:',carta);
+				//console.log('Carta Capturada:',carta);
 			}catch(erro){
 				console.warn('Acabaram as cartas');
 				throw erro;
@@ -57,21 +57,20 @@ class Agente{
 	jogaCartaNaMao(ultimaCartaJogada){
 		return new Promise((resolve, reject) => {
 			//Encontra uma carta para jogar
-			this.cartasNaMao.forEach((carta, chave) => {
+			this.cartasNaMao.forEach(async (carta, chave) => {
 				if( (carta.tipo == 'numerada' && ((carta.cor == ultimaCartaJogada.cor) || (carta.id == ultimaCartaJogada.id)))  || carta.tipo == 'coringa' ){
-					this.uno.insereCartaNoAmbiente(carta); //Inserindo carta
+					await this.uno.insereCartaNoAmbiente(carta); //Inserindo carta
 					this.cartasNaMao.splice(chave, chave); //Remove carta da mão
 					this.verificaGanhador(); // retorna throw se acabou as cartas
-					console.log(this.nomeAgente+' jogou:',carta);
 					console.log(this.nomeAgente+' jogou:',carta);
 					resolve(true);
 				}
 			});
-			reject();
+			//reject();
 		});
 	}
 
-	realizaBuscaNoBaralho(ultimaCartaJogada){
+	compraCartaNoBaralho(ultimaCartaJogada){
 		return new Promise(async (resolve, reject) => {
 			//Não encontrou cartas na mão
 			//retirar cartas do baralho até encontrar
@@ -79,7 +78,7 @@ class Agente{
 				let novaCarta = await this.uno.retiraCartaDoBaralho();
 
 				if( (novaCarta.tipo == 'numerada' && ((novaCarta.cor == ultimaCartaJogada.cor) || (novaCarta.id == ultimaCartaJogada.id)))  || novaCarta.tipo == 'coringa' ){
-					this.uno.insereCartaNoAmbiente(novaCarta); //Inserindo carta
+					await this.uno.insereCartaNoAmbiente(novaCarta); //Inserindo carta
 					console.log(this.nomeAgente+' jogou:',novaCarta);
 					this.verificaGanhador();			
 					resolve();
@@ -91,16 +90,16 @@ class Agente{
 	}
 
 	async realizaJogada(){
-		let ultimaCartaJogada = this.uno.getUltimaCartaJogadaNoAmbiente();
-		console.log(this.nomeAgente,' está jogando');
-		console.log(ultimaCartaJogada,' ultimaCartaJOgada');
+		let ultimaCartaJogada = await this.uno.getUltimaCartaJogadaNoAmbiente();
+		console.warn(this.nomeAgente,' está jogando');
+		
 		this.isUltimaCartaJogadaCoringa(ultimaCartaJogada).then(() => {
 			return;
 		}).catch(() =>{
 			this.jogaCartaNaMao(ultimaCartaJogada).then(() => {
 				return;
 			}).catch(() => {
-				this.realizaBuscaNoBaralho(ultimaCartaJogada).then(() => {
+				this.compraCartaNoBaralho(ultimaCartaJogada).then(() => {
 					return;
 				}).catch(()=>{
 					throw 'Aconteceu algo que nao devia!';
@@ -111,7 +110,7 @@ class Agente{
 
 		// await this.isUltimaCartaJogadaCoringa(ultimaCartaJogada);
 		// await this.jogaCartaNaMao(ultimaCartaJogada);
-		// await this.realizaBuscaNoBaralho(ultimaCartaJogada);
+		// await this.compraCartaNoBaralho(ultimaCartaJogada);
 	}
 
 	verificaGanhador(){

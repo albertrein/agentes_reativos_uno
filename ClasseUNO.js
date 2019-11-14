@@ -127,12 +127,17 @@ class UNO{
 		}); //fim promise
 	}
 
-	getUltimaCartaJogadaNoAmbiente(){
-		return this.ambiente[this.ambiente.length-1];
-	}
+	getUltimaCartaJogadaNoAmbiente = () => 
+		new Promise((resolve, reject) => {
+			resolve(this.ambiente[this.ambiente.length-1])
+		}) 
+	
 
-	insereCartaNoAmbiente(carta){
-		this.ambiente.push(carta);
+	insereCartaNoAmbiente(carta) {
+		return new Promise((resolve, reject) => {
+			this.ambiente.push(carta);
+			resolve(true);
+		});		
 	}
 
 	

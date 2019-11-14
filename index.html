@@ -21,8 +21,10 @@
 			await agente2.pegaCartaDoBaralho();
 			console.log('cartas agt1:', agente1.cartasNaMao);
 			console.log('cartas agt2:', agente2.cartasNaMao);
+			console.log('Primeira Carta Ambiente:', uno.ambiente);
 
-
+			await agente1.timer(); // Timer para ver se as cartas foram devidamente carregadas.
+			
 			//Inicia laço infinito
 			//Cada agente realiza suas jogadas
 			//Finaliza com uma chamada de expetion que caí no catch de fora
@@ -30,7 +32,12 @@
 			
 				//while(uno.cartas.length > 0){
 					await agente1.realizaJogada();
+					console.log(await uno.ambiente);
+					await agente1.timer();
+					
 					await agente2.realizaJogada();
+					console.log(await uno.ambiente);					
+					await agente2.timer();
 				//}
 			
 
@@ -56,7 +63,7 @@
 				uno.ambiente.push(uno.cartas[27]); // Passando uma carta pro ambiente
 				await jogo(uno);
 			}catch(e){
-				console.log(e); // O agente retornará uma exception dizendo o que está acontecendo, se ganhou ou acabaram as cartas
+				console.error(e); // O agente retornará uma exception dizendo o que está acontecendo, se ganhou ou acabaram as cartas
 			}
 
 		}

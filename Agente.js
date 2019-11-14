@@ -5,6 +5,13 @@ class Agente{
 		this.uno = uno;		
 	}
 
+	timer = () => 
+		(new Promise((resolve,reject) => {
+			setTimeout(()=>{
+				resolve();
+			},5000);
+		}))
+
 	async pegaCartaDoBaralho(quantidade = 7){
 		for(let i = 0; i < quantidade; i++){
 			try{
@@ -19,10 +26,15 @@ class Agente{
 		}
 	}
 
-	mostrarCartasNaMao(){ this.pegaCartaDoBaralho(); console.log(this.cartasNaMao); }
+	mostrarCartasNaMao(){
+		return new Promise((resolve, reject) => {
+			console.log(this.nomeAgente, this.cartasNaMao);
+			resolve();
+		});
+	}
 
 	isUltimaCartaJogadaCoringa(ultimaCartaJogada){
-		return new Promise((resolve, reject) => {
+		return new Promise( async (resolve, reject) => {
 			//Verifica se a última carta foi uma coringa e retorna
 			if(ultimaCartaJogada.tipo === 'coringa'){
 				switch(ultimaCartaJogada.acao){
@@ -31,10 +43,10 @@ class Agente{
 					case 'reverter':
 						break;
 					case '+2':
-						this.pegaCartaDoBaralho(2);
+						await this.pegaCartaDoBaralho(2);
 						break;
 					case '+4':
-						this.pegaCartaDoBaralho(4);					
+						await this.pegaCartaDoBaralho(4);					
 				}
 				resolve();
 			}

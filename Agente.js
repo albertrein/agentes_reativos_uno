@@ -52,16 +52,44 @@ class Agente{
 		});
 	}
 
-	jogaCartaNaMao(ultimaCartaJogada){
-		console.log('jogaCartaNaMao');
-		return new Promise((resolve, reject) => {
-			//Encontra uma carta para jogar
-			this.cartasNaMao.forEach(async (carta, chave) => {
-				if(await this.verificaCartaJogavel(carta, chave, ultimaCartaJogada) == true){
-					resolve(true);
-				}				
-			});			
+
+	jogaCartaNaMao = (ultimaCartaJogada) =>  
+		new Promise(async (resolve, reject) => {
+
+			let verificaCarta = (carta) =>
+				new Promise((resolve, reject) => {
+					if( carta.tipo == "coringa" ||	(carta.cor == ultimaCartaJogada.cor || carta.id == ultimaCartaJogada.id) ){
+						resolve(true);
+					}
+				});
+			
+			const loopVerificacao = this.cartasNaMao.map(async (objetoCarta) => {
+				if(await verificaCarta(objetoCarta) == true){resolve('carai cuzao');}
+			});
+
+			await Promise.all(loopVerificacao);
+
 		});
+		
+
+
+
+	
+
+	verificaCartaJogavel(carta, chave = false, ultimaCartaJogada){
+		return new Promise(async (resolve, reject) => {
+			if((carta.tipo == 'numerada' && ((carta.cor == ultimaCartaJogada.cor) || (carta.id == ultimaCartaJogada.id)))  || carta.tipo == 'coringa'){
+				await this.uno.insereCartaNoAmbiente(carta); //Inserindo carta no ambiente
+				if(chave){
+					await this.removeCartaDaMao(chave);
+				}
+				await this.verificaGanhador();
+				resolve(true);
+			}else{
+				if(!chave){await this.insereCartaNaMao(carta);resolve(false);}else{resolve(false);}				
+				
+			}
+		})
 	}
 
 	compraCartaNoBaralho(ultimaCartaJogada){
@@ -79,39 +107,30 @@ class Agente{
 		});
 	}
 
-	verificaCartaJogavel(carta, chave = false, ultimaCartaJogada){
-		return new Promise(async (resolve, reject) => {
-			if((carta.tipo == 'numerada' && ((carta.cor == ultimaCartaJogada.cor) || (carta.id == ultimaCartaJogada.id)))  || carta.tipo == 'coringa'){
-				await this.uno.insereCartaNoAmbiente(carta); //Inserindo carta no ambiente
-				if(chave){
-					await this.removeCartaDaMao(chave);
-				}
-				await this.verificaGanhador();
+
+	realizaJogada = () => 
+		new Promise(async (resolve, reject) => {
+			let ultimaCartaJogada = await this.uno.getUltimaCartaJogadaNoAmbiente();
+			console.warn(this.nomeAgente,' está jogando');
+
+			// if(await this.isUltimaCartaJogadaCoringa(ultimaCartaJogada) == true){
+			// 	return ;
+			// }
+
+			let out = await this.jogaCartaNaMao(ultimaCartaJogada);
+			console.log('saida', out);
+			resolve();
+			/*if( out == true){
+				resolve(true);
+			}*/
+
+			/*if(await this.compraCartaNoBaralho(ultimaCartaJogada) == true){
 				resolve(true);
 			}else{
-				await this.insereCartaNaMao(carta);
-				resolve(false);
-			}
+				throw 'Aconteceu algo que nao devia!';
+			}*/
 		})
-	}
 
-	async realizaJogada(){
-		let ultimaCartaJogada = await this.uno.getUltimaCartaJogadaNoAmbiente();
-		console.warn(this.nomeAgente,' está jogando');
-
-		// if(await this.isUltimaCartaJogadaCoringa(ultimaCartaJogada) == true){
-		// 	return ;
-		// }
-		if(await this.jogaCartaNaMao(ultimaCartaJogada) == true){
-			return ;
-		}
-		if(await this.compraCartaNoBaralho(ultimaCartaJogada) == true){
-			return ;
-		}else{
-			throw 'Aconteceu algo que nao devia!';
-		}	
-		
-	}
 
 	verificaGanhador = () => 
 		new Promise((resolve, reject) => {

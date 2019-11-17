@@ -32,12 +32,12 @@
 			
 				//while(uno.cartas.length > 0){
 					await agente1.realizaJogada();
-					console.log(await uno.ambiente);
+					console.log('Ambiente',await uno.ambiente);
 					await agente1.timer();
 					
-					await agente2.realizaJogada();
-					console.log(await uno.ambiente);					
-					await agente2.timer();
+					// await agente2.realizaJogada();
+					// console.log('ambiente',await uno.ambiente);					
+					// await agente2.timer();
 				//}
 			
 
@@ -62,6 +62,7 @@
 				await uno.embaralharCartas(); // Embaralha cartas
 				uno.ambiente.push(uno.cartas[27]); // Passando uma carta pro ambiente
 				await jogo(uno);
+				console.log('Jogo Finalizado!');
 			}catch(e){
 				console.error(e); // O agente retornará uma exception dizendo o que está acontecendo, se ganhou ou acabaram as cartas
 			}

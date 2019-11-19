@@ -52,60 +52,60 @@ class Agente{
 		});
 	}
 
+	jogaCartaDaMao = (ultimaCartaJogadaNoAmbiente) => new Promise(async (resolve, reject) => {
+		let cartaEncontrada = await this.verificaCartaNaMao(ultimaCartaJogadaNoAmbiente);
+		if(cartaEncontrada){
+			await this.uno.insereCartaNoAmbiente(cartaEncontrada);
+			await this.removeCartaDaMao(cartaEncontrada);
+			resolve('carta inserida no ambiente!');
+		}else{
+			reject('carta nao encontrada');
+		}
+	})
 
-	jogaCartaNaMao = (ultimaCartaJogada) =>  
-		new Promise(async (resolve, reject) => {
+	jogaCartaDoBaralho = (ultimaCartaJogadaNoAmbiente) => new Promise(async (resolve, reject) => {
+		let cartaEncontrada = await this.verificaCartaDoBaralho(ultimaCartaJogadaNoAmbiente);
+		if(cartaEncontrada){
+			await this.uno.insereCartaNoAmbiente(cartaEncontrada);
+			resolve('carta inserida');
+		}else{
+			reject('Carta não econtrada no Baralho');
+		}
+	})
 
-			let verificaCarta = (carta) =>
-				new Promise((resolve, reject) => {
-					if( carta.tipo == "coringa" ||	(carta.cor == ultimaCartaJogada.cor || carta.id == ultimaCartaJogada.id) ){
-						resolve(true);
-					}
-				});
+	verificaCartaDoBaralho = (ultimaCartaJogada) => new Promise(async (resolve, reject) => {
+		const loopVerificacaoCartasDoBaralho = this.uno.cartas.map(async (objetoCarta) => {
+			if(await this.verificaCarta(objetoCarta, ultimaCartaJogada) == true){
+				resolve(objetoCarta);
+			}else{
+				await this.insereCartaNaMao(objetoCarta);
+			}
+		});
+
+		await Promise.all(loopVerificacaoCartasDoBaralho);
+		resolve();		
+	})
+
+	verificaCartaNaMao = (ultimaCartaJogada) =>  
+		new Promise(async (resolve, reject) => {			
 			
 			const loopVerificacao = this.cartasNaMao.map(async (objetoCarta) => {
-				if(await verificaCarta(objetoCarta) == true){resolve('true');}
+				if(await this.verificaCarta(objetoCarta, ultimaCartaJogada) == true){resolve(objetoCarta);}
 			});
 
 			await Promise.all(loopVerificacao);
-
+			resolve();
 		});
 		
 
-
-
-	
-
-	verificaCartaJogavel(carta, chave = false, ultimaCartaJogada){
-		return new Promise(async (resolve, reject) => {
-			if((carta.tipo == 'numerada' && ((carta.cor == ultimaCartaJogada.cor) || (carta.id == ultimaCartaJogada.id)))  || carta.tipo == 'coringa'){
-				await this.uno.insereCartaNoAmbiente(carta); //Inserindo carta no ambiente
-				if(chave){
-					await this.removeCartaDaMao(chave);
-				}
-				await this.verificaGanhador();
+	verificaCarta = (carta, ultimaCartaJogada) =>
+		new Promise((resolve, reject) => {
+			if( carta.tipo == "coringa" ||	(carta.cor == ultimaCartaJogada.cor || carta.id == ultimaCartaJogada.id) ){
 				resolve(true);
-			}else{
-				if(!chave){await this.insereCartaNaMao(carta);resolve(false);}else{resolve(false);}				
-				
-			}
-		})
-	}
-
-	compraCartaNoBaralho(ultimaCartaJogada){
-		console.log('compraCartaNoBaralho');
-		return new Promise(async (resolve, reject) => {
-			//Não encontrou cartas na mão
-			//retirar cartas do baralho até encontrar
-			while(this.uno.cartas.length > 0){
-				let novaCarta = await this.uno.retiraCartaDoBaralho();
-				if(await this.verificaCartaJogavel(novaCarta,false,ultimaCartaJogada) == true){
-					resolve(true);
-				}
-				continue;
 			}
 		});
-	}
+
+
 
 
 	realizaJogada = () => 
@@ -116,19 +116,14 @@ class Agente{
 			// if(await this.isUltimaCartaJogadaCoringa(ultimaCartaJogada) == true){
 			// 	return ;
 			// }
-
-			let out = await this.jogaCartaNaMao(ultimaCartaJogada);
-			console.log('saida', out);
-			resolve();
-			/*if( out == true){
-				resolve(true);
-			}*/
-
-			/*if(await this.compraCartaNoBaralho(ultimaCartaJogada) == true){
-				resolve(true);
+			if(await this.jogaCartaDaMao(ultimaCartaJogada) == 'carta inserida no ambiente!'){
+				resolve();
 			}else{
-				throw 'Aconteceu algo que nao devia!';
-			}*/
+				console.warn('Carta')
+				// if( await this.jogaCartaDoBaralho(ultimaCartaJogada) == 'carta inserida'){
+				// 	resolve();
+				// }
+			}
 		})
 
 
@@ -142,9 +137,9 @@ class Agente{
 		})
 		
 
-	removeCartaDaMao = (chave) => 
+	removeCartaDaMao = (carta) => 
 		new Promise((resolve, reject) => {
-			this.cartasNaMao.splice(chave, chave);
+			this.cartasNaMao = this.cartasNaMao.filter(item => item !== carta);
 			resolve(true);
 		})
 
@@ -156,5 +151,6 @@ class Agente{
 
 }
 	/** TodoList:
-		* Re-visar lógica do ganhador	
+		* Re-visar lógica do jogaCartaDoBaralho que não está funcionando
+			*Algum problema está gerando após jogaCartaNaMao quando não encontra uma carta
 	*/

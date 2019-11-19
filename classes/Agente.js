@@ -64,7 +64,7 @@ class Agente{
 				});
 			
 			const loopVerificacao = this.cartasNaMao.map(async (objetoCarta) => {
-				if(await verificaCarta(objetoCarta) == true){resolve('carai cuzao');}
+				if(await verificaCarta(objetoCarta) == true){resolve('true');}
 			});
 
 			await Promise.all(loopVerificacao);

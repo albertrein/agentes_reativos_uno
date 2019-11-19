@@ -4,7 +4,8 @@
   "description": "Sistema de agentes reativos, para estudos de promises;",
   "main": "ClasseUNO.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/albertrein/agentes_reativos_uno/issues"
   },
-  "homepage": "https://github.com/albertrein/agentes_reativos_uno#readme"
+  "homepage": "https://github.com/albertrein/agentes_reativos_uno#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.4"
+  }
 }

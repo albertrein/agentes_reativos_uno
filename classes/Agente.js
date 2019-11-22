@@ -59,7 +59,8 @@ class Agente{
 			await this.removeCartaDaMao(cartaEncontrada);
 			resolve('carta inserida no ambiente!');
 		}else{
-			reject('carta nao encontrada');
+			console.warn(this.nomeAgente+' nao encontrou carta na mão');
+			resolve('carta nao encontrada');
 		}
 	})
 
@@ -102,6 +103,8 @@ class Agente{
 		new Promise((resolve, reject) => {
 			if( carta.tipo == "coringa" ||	(carta.cor == ultimaCartaJogada.cor || carta.id == ultimaCartaJogada.id) ){
 				resolve(true);
+			}else{
+				resolve(false);
 			}
 		});
 
@@ -119,10 +122,12 @@ class Agente{
 			if(await this.jogaCartaDaMao(ultimaCartaJogada) == 'carta inserida no ambiente!'){
 				resolve();
 			}else{
-				console.warn('Carta')
-				// if( await this.jogaCartaDoBaralho(ultimaCartaJogada) == 'carta inserida'){
-				// 	resolve();
-				// }
+				console.warn('Buscando carta no Baralho ... ');
+				if( await this.jogaCartaDoBaralho(ultimaCartaJogada) == 'carta inserida'){
+					resolve();
+				}else{
+					reject();
+				}
 			}
 		})
 
@@ -151,6 +156,7 @@ class Agente{
 
 }
 	/** TodoList:
-		* Re-visar lógica do jogaCartaDoBaralho que não está funcionando
-			*Algum problema está gerando após jogaCartaNaMao quando não encontra uma carta
+		* verificaCartaDoBaralho problema no if de validação da carta
+			* Senão é a carta ideal para o ambiente a carta do baralho deve ser removida do baralho e inserida na mão
+			* A carta é apenas inserida na mão.
 	*/

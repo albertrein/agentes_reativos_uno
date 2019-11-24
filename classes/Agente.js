@@ -48,7 +48,7 @@ class Agente{
 					resolve(true);
 				}else{resolve(false);}
 			}
-			resolve('faslse');
+			resolve('false');
 		});
 	}
 
@@ -65,26 +65,31 @@ class Agente{
 	})
 
 	jogaCartaDoBaralho = (ultimaCartaJogadaNoAmbiente) => new Promise(async (resolve, reject) => {
-		let cartaEncontrada = await this.verificaCartaDoBaralho(ultimaCartaJogadaNoAmbiente);
-		if(cartaEncontrada){
-			await this.uno.insereCartaNoAmbiente(cartaEncontrada);
-			resolve('carta inserida');
+		if(await this.verificaCartaDoBaralho(ultimaCartaJogadaNoAmbiente) == true){
+			resolve(true);		
 		}else{
-			reject('Carta não econtrada no Baralho');
+			throw 'Carta não econtrada no Baralho';
 		}
 	})
 
 	verificaCartaDoBaralho = (ultimaCartaJogada) => new Promise(async (resolve, reject) => {
-		const loopVerificacaoCartasDoBaralho = this.uno.cartas.map(async (objetoCarta) => {
-			if(await this.verificaCarta(objetoCarta, ultimaCartaJogada) == true){
-				resolve(objetoCarta);
-			}else{
-				await this.insereCartaNaMao(objetoCarta);
+		const loopVerificacaoCartasDoBaralho = this.uno.cartas.map(async _=> {
+			
+			let ultimaCartaDoBaralho = await this.uno.retiraCartaDoBaralho();			
+			await this.insereCartaNaMao(ultimaCartaDoBaralho);
+			if(await this.verificaCarta(ultimaCartaDoBaralho, ultimaCartaJogada) == true){
+				resolve(true);
 			}
+
+			// if(await this.verificaCarta(objetoCarta, ultimaCartaJogada) == true){
+			// 	resolve(objetoCarta);
+			// }else{
+			// 	await this.insereCartaNaMao(objetoCarta);
+			// }
 		});
 
 		await Promise.all(loopVerificacaoCartasDoBaralho);
-		resolve();		
+		resolve(false);		
 	})
 
 	verificaCartaNaMao = (ultimaCartaJogada) =>  
@@ -123,8 +128,10 @@ class Agente{
 				resolve();
 			}else{
 				console.warn('Buscando carta no Baralho ... ');
-				if( await this.jogaCartaDoBaralho(ultimaCartaJogada) == 'carta inserida'){
-					resolve();
+				if( await this.jogaCartaDoBaralho(ultimaCartaJogada) == true){
+					if(await this.jogaCartaDaMao(ultimaCartaJogada) == 'carta inserida no ambiente!'){
+						resolve();
+					}
 				}else{
 					reject();
 				}
@@ -132,8 +139,7 @@ class Agente{
 		})
 
 
-	verificaGanhador = () => 
-		new Promise((resolve, reject) => {
+	verificaGanhador = _ => new Promise((resolve, reject) => {
 			if(this.cartasNaMao.length <= 0){
 				throw this.nomeAgente + ' Ganhou!';
 			}else{

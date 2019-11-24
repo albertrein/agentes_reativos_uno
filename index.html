@@ -33,19 +33,23 @@
 					await agente1.realizaJogada();
 					console.log('Ambiente',await uno.ambiente);
 					console.log('cartas agt1:', agente1.cartasNaMao);
-					console.log('NUmero cartas Baralho:', uno.cartas.length);
+					console.log('Numero cartas Baralho:', uno.cartas.length);
+					await agente1.verificaGanhador();
 					await agente1.timer();
 
 					await agente2.realizaJogada();
 					console.log('Ambiente',await uno.ambiente);
 					console.log('cartas agt2:', agente2.cartasNaMao);
 					console.log('NUmero cartas Baralho:', uno.cartas.length);
-					await agente1.timer();					
+					await agente2.verificaGanhador();
+					await agente2.timer();					
 				}
 				
 		}
 
-		async function ambiente (){
+		
+		
+		ambiente = _ => new Promise( async (resolve, reject) => {
 
 			var uno = new UNO(); // Instância objeto, cria cartas do baralho			
 
@@ -55,13 +59,21 @@
 				uno.ambiente.push(uno.cartas[27]); // Passando uma carta pro ambiente
 				await jogo(uno);
 				console.log('Jogo Finalizado!');
+				resolve();
 			}catch(e){
 				console.error(e); // O agente retornará uma exception dizendo o que está acontecendo, se ganhou ou acabaram as cartas
+				resolve();
 			}
+		});
 
+		
+		let start = async () => {
+			while(true){
+				await ambiente();
+			}			
 		}
 
-		ambiente();
+		start();
 
 		/**
 		* TodoList:

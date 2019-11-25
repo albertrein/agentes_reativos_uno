@@ -68,7 +68,8 @@ class Agente{
 		if(await this.verificaCartaDoBaralho(ultimaCartaJogadaNoAmbiente) == true){
 			resolve(true);		
 		}else{
-			throw 'Carta não econtrada no Baralho';
+			console.error('Carta não econtrada no Baralho');
+			resolve(false);
 		}
 	})
 
